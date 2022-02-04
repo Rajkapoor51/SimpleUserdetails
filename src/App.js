@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import Auth from "./components/auth";
+import Dashboard from "./components/dashboard";
+import { useUserContext } from "./context/userContext";
+import Navbar from './sidemenu/Navbar.js';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import OtherUserList from "./OtherUserList";
+import MyProfile from "./MyProfile";
+import Signin from "./components/signin";
+import Signup from "./components/signup";
+
 
 function App() {
+  const { user, loading, error } = useUserContext();
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {error && <p className="error">{error}</p>}
+      {loading ? <h2>Loading...</h2> : <> {user ?  <Dashboard/> : <Auth/>} </>}
+      <Router>
+        <Switch>
+        <Route exact path='/'>
+        <Navbar/>
+        </Route>
+          <Route path='/myProfile' component={MyProfile} />
+          <Route path='/otherUserList' component={OtherUserList} />
+        </Switch>
+      </Router>
+    
     </div>
   );
 }
